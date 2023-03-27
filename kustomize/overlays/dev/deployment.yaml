@@ -7,7 +7,7 @@ spec:
   template:
     spec:
       containers:
-      - image: quay.io/wpernath/simple-quarkus:latest
+      - image: quay.io/rafaeltuelho/simple-quarkus:latest
         imagePullPolicy: Always
         name: simple
         ports:
