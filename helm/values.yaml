@@ -1,11 +1,11 @@
 deployment:
-    image: quay.io/wpernath/simple-quarkus
-    version: 1.2.0
+    image: quay.io/rafaeltuelho/simple-quarkus
+    version: latest
     replicas: 1
     includeHealthChecks: true
 
 route:
-    host: simple-article-helm.apps-crc.testing
+    host: simple-article-helm.apps.sandbox-m3.1530.p1.openshiftapps.com
 
 config:
     greeting: 'We are on a newer version now!'

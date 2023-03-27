@@ -5,7 +5,7 @@ commonLabels:
 
 # replace the image tag of the container with latest
 images:
-- name: quay.io/wpernath/simple-quarkus
+- name: quay.io/rafaeltuelho/simple-quarkus
   newTag: latest
 
 # apply a patch to replace the Host of the Route
