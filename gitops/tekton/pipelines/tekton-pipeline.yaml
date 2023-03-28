@@ -4,7 +4,7 @@ metadata:
   name: gitops-dev-pipeline
 spec:
   params:
-    - default: 'https://github.com/wpernath/quarkus-simple.git'
+    - default: 'https://github.com/rafaeltuelho/quarkus-simple.git'
       description: Source to the GIT
       name: git-url
       type: string
@@ -15,7 +15,7 @@ spec:
     - name: config-git-url
       type: string
       description: URL of the Git config repository
-      default: 'https://github.com/wpernath/quarkus-simple-config.git'
+      default: 'https://github.com/rafaeltuelho/quarkus-simple-config.git'
     - name: config-dir
       type: string
       description: Configuration directory within the config-git-url with the files
@@ -27,7 +27,7 @@ spec:
     - name: image-name
       type: string
       description: the name of the target image including registry
-      default: quay.io/wpernath/quarkus-simple-wow
+      default: quay.io/rafaeltuelho/quarkus-simple-wow
     - name: image-username
       type: string
       description: the username you use to access the registry
@@ -112,7 +112,7 @@ spec:
         - name: GIT_REPOSITORY
           value: $(params.config-git-url)
         - name: CURRENT_IMAGE
-          value: quay.io/wpernath/simple-quarkus:latest
+          value: quay.io/rafaeltuelho/simple-quarkus:latest
         - name: NEW_IMAGE
           value: $(params.image-name)
         - name: NEW_DIGEST

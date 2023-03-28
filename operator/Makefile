@@ -29,7 +29,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
 # wanja.org/simple-quarkus-operator-bundle:$VERSION and wanja.org/simple-quarkus-operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= quay.io/wpernath/simple-quarkus-operator
+IMAGE_TAG_BASE ?= quay.io/rafaeltuelho/simple-quarkus-operator
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)

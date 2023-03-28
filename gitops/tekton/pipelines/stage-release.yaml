@@ -7,7 +7,7 @@ spec:
     - name: git-url
       type: string
       description: the url of the config repo to clone
-      default: 'https://github.com/wpernath/quarkus-simple-config.git'
+      default: 'https://github.com/rafaeltuelho/quarkus-simple-config.git'
     - name: git-revision
       type: string
       description: the revision of the config repo to clone
@@ -19,7 +19,7 @@ spec:
     - name: target-image
       type: string
       description: The target image name of the config (without tag/digest)
-      default: quay.io/wpernath/quarkus-simple-wow
+      default: quay.io/rafaeltuelho/quarkus-simple-wow
 
     - name: kustomize-dev
       type: string
@@ -116,7 +116,7 @@ spec:
         - name: release-name
           value: "$(params.release-name)"
         - name: old-image
-          value: quay.io/wpernath/simple-quarkus:latest
+          value: quay.io/rafaeltuelho/simple-quarkus:latest
         - name: new-image
           value: "$(params.target-image)"
         - name: digest

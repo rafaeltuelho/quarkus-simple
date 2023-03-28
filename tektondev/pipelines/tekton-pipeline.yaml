@@ -1,114 +1,145 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: new-pipeline
+  name: build-and-deploy-app
 spec:
-  params:
-    - default: 'https://github.com/wpernath/quarkus-simple.git'
-      description: Source to the GIT
-      name: git-url
-      type: string
-    - default: main
-      description: revision to be used
-      name: git-revision
-      type: string
-    - name: context-dir
-      default: "the-source"
-      type: string
-      description: Where to checkout the source relative to the workspace
-    - name: image-name
-      type: string
-      description: the name of the target image including registry
-      default: quay.io/wpernath/quarkus-simple-wow
-    - name: image-username
-      type: string
-      description: the username you use to access the registry
-    - name: image-password
-      type: string
-      description: The password you use to access the registry
-    - name: target-namespace
-      description: The name of the namespace to apply the result to
-  tasks:
-    - name: git-clone
+  finally:
+    - name: kustomize-deploy
       params:
-        - name: url
-          value: $(params.git-url)
-        - name: deleteExisting
-          value: 'true'
-        - name: verbose
-          value: 'true'
-        - name: revision
-          value: $(params.git-revision)
-        - name: subdirectory
-          value: $(params.context-dir)
-      taskRef:
-        kind: ClusterTask
-        name: git-clone
-      workspaces:
-        - name: output
-          workspace: shared-workspace
-    - name: package
-      params:
-        - name: GOALS
-          value:
-            - package
-            - '-DskipTests'
-        - name: CONTEXT_DIR
-          value: "$(params.context-dir)"
-      runAfter:
-        - git-clone
-      taskRef:        
-        kind: Task
-        name: maven-caching
-      workspaces:
-        - name: source
-          workspace: shared-workspace
-        - name: maven-settings
-          workspace: maven-settings
-    - name: build-and-push-image
-      params:
-        - name: GOALS
-          value:
-            - package
-            - '-DskipTests'
-            - '-Dquarkus.container-image.build=true'
-            - '-Dquarkus.container-image.push=true'
-            - '-Dquarkus.container-image.builder=jib'
-            - '-Dquarkus.container-image.image=$(params.image-name)'
-            - '-Dquarkus.container-image.username=$(params.image-username)'
-            - '-Dquarkus.container-image.password=$(params.image-password)'
-        - name: CONTEXT_DIR
-          value: "$(params.context-dir)"
-      runAfter:
-        - package
-      taskRef:
-        kind: Task
-        name: maven-caching
-      workspaces:
-        - name: source
-          workspace: shared-workspace
-        - name: maven-settings
-          workspace: maven-settings
-    - name: apply-kustomize
-      params: 
         - name: kustomize-dir
-          value: $(params.context-dir)/kustomize_ext/overlays/dev
+          value: $(params.context-dir)/$(params.kustomize-dir)
         - name: target-namespace
           value: $(params.target-namespace)
         - name: image-name
           value: $(params.image-name)
         - name: image-digest-path
           value: $(params.context-dir)/target
-      taskRef:        
+      taskRef:
         kind: Task
         name: kustomize
-      runAfter:
-        - build-and-push-image
       workspaces:
         - name: source
           workspace: shared-workspace
+  params:
+    - default: 'https://github.com/rafaeltuelho/quarkus-simple.git'
+      description: Git repo URL
+      name: git-url
+      type: string
+    - default: main
+      description: 'branch, tag, revision'
+      name: git-revision
+      type: string
+    - default: .
+      description: repo sub directory
+      name: context-dir
+      type: string
+    - name: kustomize-dir
+      type: string
+      default: kustomize_ext/overlays/dev
+      description: 'Kustomize manifests dir'
+    - default: quay.io/rafaeltuelho/quarkus-simple-wow
+      description: App's container image name
+      name: image-name
+      type: string
+    - default: rafaeltuelho
+      name: registry-username
+      type: string
+    - default: >-
+        4Sfmu4gMZmtG/SlN7UqIlLtcUvFgoZfnKjFQPD3vihqy3XHZpQs9Fuey/MHRmZzftQseKkfMftwiXVkl+tnHKw==
+      name: registry-token
+      type: string
+    - default: rafael-soares-dev
+      name: target-namespace
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+        - name: submodules
+          value: 'true'
+        - name: depth
+          value: '1'
+        - name: sslVerify
+          value: 'true'
+        - name: crtFileName
+          value: ca-bundle.crt
+        - name: subdirectory
+          value: $(params.context-dir)
+        - name: deleteExisting
+          value: 'true'
+        - name: verbose
+          value: 'true'
+        - name: gitInitImage
+          value: >-
+            registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:a538c423e7a11aae6ae582a411fdb090936458075f99af4ce5add038bb6983e8
+        - name: userHome
+          value: /tekton/home
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+    - name: maven-package
+      params:
+        - name: MAVEN_IMAGE
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/openshift/java:latest
+        - name: GOALS
+          value:
+            - clean
+            - package
+            - '-DskipTests'
+            - '-B'
+            - '-Dmaven.repo.local=$(workspaces.source.path)/.m2'
+        - name: PROXY_PROTOCOL
+          value: http
+        - name: CONTEXT_DIR
+          value: $(params.context-dir)
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: maven
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: maven-settings
+          workspace: maven-settings
+    - name: image-build
+      params:
+        - name: MAVEN_IMAGE
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/openshift/java:latest
+        - name: GOALS
+          value:
+            - package
+            - '-DskipTests'
+            - '-B'
+            - '-Dmaven.repo.local=$(workspaces.source.path)/.m2'
+            - '-Dquarkus.container-image.build=true'
+            - '-Dquarkus.container-image.push=true'
+            - '-Dquarkus.container-image.builder=jib'
+            - '-Dquarkus.container-image.image=$(params.image-name)'
+            - '-Dquarkus.container-image.username=$(params.registry-username)'
+            - '-Dquarkus.container-image.password=$(params.registry-token)'
+        - name: PROXY_PROTOCOL
+          value: http
+        - name: CONTEXT_DIR
+          value: $(params.context-dir)
+      runAfter:
+        - maven-package
+      taskRef:
+        kind: ClusterTask
+        name: maven
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: maven-settings
+          workspace: maven-settings
   workspaces:
     - name: shared-workspace
-      optional: false
     - name: maven-settings
-      optional: false

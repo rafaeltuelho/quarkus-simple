@@ -9,7 +9,7 @@ metadata:
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions: {}
-  description: This is a simple quarkus operator created for the article mentioned on https://github.com/wpernath/quarkus-simple
+  description: This is a simple quarkus operator created for the article mentioned on https://github.com/rafaeltuelho/quarkus-simple
   displayName: Simple Quarkus Operator
   icon:
   - base64data: ""
@@ -41,5 +41,5 @@ spec:
   maturity: alpha
   provider:
     name: Wanja Pernath
-    url: https://github.com/wpernath/quarkus-simple
+    url: https://github.com/rafaeltuelho/quarkus-simple
   version: 0.0.0

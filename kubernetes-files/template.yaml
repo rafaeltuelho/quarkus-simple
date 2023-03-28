@@ -71,7 +71,7 @@ parameters:
   description: The name and path of the image
   displayName: Image Name
   required: true
-  value: quay.io/wpernath/simple-quarkus
+  value: quay.io/rafaeltuelho/simple-quarkus
 - name: IMAGE_TAG
   displayName: Image Tag
   description: The tag of the image

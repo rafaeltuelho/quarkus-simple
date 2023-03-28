@@ -5,11 +5,11 @@ set -e -u -o pipefail
 declare -r SCRIPT_DIR=$(cd -P $(dirname $0) && pwd)
 declare COMMAND="help"
 
-GIT_URL=https://github.com/wpernath/quarkus-simple.git
+GIT_URL=https://github.com/rafaeltuelho/quarkus-simple.git
 GIT_REVISION=main
 PIPELINE=new-pipeline
 CONTEXT_DIR=the-source
-IMAGE_NAME=quay.io/wpernath/quarkus-simple-wow
+IMAGE_NAME=quay.io/rafaeltuelho/quarkus-simple-wow
 IMAGE_USER=wpernath
 IMAGE_PASSWORD=
 TARGET_NAMESPACE=art-tekton

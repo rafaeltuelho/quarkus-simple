@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     path: config/overlays/dev
-    repoURL: https://github.com/wpernath/quarkus-simple-config.git
+    repoURL: https://github.com/rafaeltuelho/quarkus-simple-config.git
     targetRevision: HEAD
   syncPolicy:
     automated:

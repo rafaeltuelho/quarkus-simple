@@ -4,7 +4,7 @@ metadata:
   name: new-test-pipeline
 spec:
   params:
-    - default: 'https://github.com/wpernath/quarkus-simple.git'
+    - default: 'https://github.com/rafaeltuelho/quarkus-simple.git'
       description: Source to the GIT
       name: git-url
       type: string
@@ -15,7 +15,7 @@ spec:
     - name: image-name
       type: string
       description: the name of the target image including registry
-      default: quay.io/wpernath/quarkus-simple-wow:latest
+      default: quay.io/rafaeltuelho/quarkus-simple-wow:latest
     - name: image-username
       type: string
       description: the username you use to access the registry

@@ -15,7 +15,7 @@ metadata:
               "greeting": "This needs to be changed per stage!"
             },
             "deployment": {
-              "image": "quay.io/wpernath/simple-quarkus",
+              "image": "quay.io/rafaeltuelho/simple-quarkus",
               "includeHealthChecks": true,
               "replicas": 1,
               "version": "1.2.0"
@@ -38,7 +38,7 @@ spec:
     - kind: QuarkusSimple
       name: quarkussimples.charts.wanja.org
       version: v1alpha1
-  description: This is a simple quarkus operator created for the article mentioned on https://github.com/wpernath/quarkus-simple
+  description: This is a simple quarkus operator created for the article mentioned on https://github.com/rafaeltuelho/quarkus-simple
   displayName: Simple Quarkus Operator
   icon:
   - base64data: ""
@@ -141,7 +141,7 @@ spec:
                 - --metrics-bind-address=127.0.0.1:8080
                 - --leader-elect
                 - --leader-election-id=simple-quarkus-operator
-                image: quay.io/wpernath/simple-quarkus-operator:0.0.4
+                image: quay.io/rafaeltuelho/simple-quarkus-operator:0.0.4
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -226,5 +226,5 @@ spec:
   maturity: alpha
   provider:
     name: Wanja Pernath
-    url: https://github.com/wpernath/quarkus-simple
+    url: https://github.com/rafaeltuelho/quarkus-simple
   version: 0.0.4
