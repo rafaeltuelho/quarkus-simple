@@ -41,15 +41,15 @@ spec:
       description: App's container image name
       name: image-name
       type: string
-    - default: rafaeltuelho
-      name: registry-username
+    # no need to pass registry creds using params if you have a proper SA and dockerconfig Secret 
+    #  setup to be used in your PipelineRuns (serviceAccount)
+    - name: registry-username
+      description: 'your container registry username'
       type: string
-    - default: >-
-        4Sfmu4gMZmtG/SlN7UqIlLtcUvFgoZfnKjFQPD3vihqy3XHZpQs9Fuey/MHRmZzftQseKkfMftwiXVkl+tnHKw==
-      name: registry-token
+    - name: registry-token
+      description: 'your container registry token/pwd'
       type: string
-    - default: rafael-soares-dev
-      name: target-namespace
+    - name: target-namespace
       type: string
   tasks:
     - name: git-clone

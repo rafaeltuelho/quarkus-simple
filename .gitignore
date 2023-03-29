@@ -31,3 +31,4 @@ target/*
 .vscode/*
 .classpath
 .factorypath
+gitops/tekton/infra/secret.demoonly

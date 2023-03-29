@@ -57,7 +57,7 @@ spec:
       script: |
         cd git-update-digest-workdir
 
-        git config user.email "wpernath@redhat.com"
+        git config user.email "rafaelcba@gmail.com"
         git config user.name "My Tekton Bot"
 
         git status

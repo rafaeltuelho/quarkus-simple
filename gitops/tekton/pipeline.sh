@@ -10,7 +10,7 @@ GIT_REVISION=main
 PIPELINE=gitops-dev-pipeline
 CONTEXT_DIR=the-source
 IMAGE_NAME=quay.io/rafaeltuelho/quarkus-simple-wow
-IMAGE_USER=wpernath
+IMAGE_USER=rafaeltuelho
 IMAGE_PASSWORD=
 TARGET_NAMESPACE=quarkus-dev
 
